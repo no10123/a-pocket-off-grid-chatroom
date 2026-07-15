@@ -1,0 +1,27 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "boards": [
+    {
+      "id": "esp32",
+      "boardKind": "esp32",
+      "x": 71.42811297261244,
+      "y": 30.038757091270355,
+      "activeFileGroupId": "group-esp32",
+      "languageMode": "arduino",
+      "serialBaudRate": 0
+    }
+  ],
+  "fileGroups": {
+    "group-esp32": [
+      {
+        "name": "sketch.ino",
+        "content": "#include <WiFi.h>\n#include <WebServer.h>\n\nconst char* ssid = \"pug palace\";\nconst char* password = \"\";\n\n#define RED_PIN 5\n#define GREEN_PIN 17\n#define BLUE_PIN 16\n\nWebServer server(80);\n\nString History = \"\";\n\nvoid setColor(int r, int g, int b) {\n  ledcWrite(0,r);\n  ledcWrite(1,g);\n  ledcWrite(2,b);\n}\n\nvoid handleRoot() {\n  server.send(200, \"text/html\", R\"rawliteral(\n<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <meta name'viewport' content='width=device-width, initial-scale=1.0'>\n    <title>Document</title>\n</head>\n<body>\n    <h1>welcome to my offgrid server.</h1>\n    <div id='chat'></div>\n    <input type='color' id='color'>\n    <input type='text' id='username'>\n    <input type='text' id='msg'>\n    <script>\n        const color = document.getElementById('color')\n        const msg = document.getElementById('msg')\n        const chat = document.getElementById('chat')\n        const u = document.getElementById('username')\n        msg.addEventListener('change', () => {\n            chat.innerHTML = chat.innerHTML + `<p style='color: ${color.value}'>[${u.value}] ${msg.value}</p>`\n            fetch(`/color?hex=${encodeURIComponent(color.value)}`)\n            fetch(`/sendChat?user=${encodeURIComponent(u.value)}&msg=${encodeURIComponent(msg.value)}&color=${encodeURIComponent(color.value)}`);\n            msg.value = ''\n        })\n        setInterval(() => {\n            fetch('/getChat')\n                .then(response => response.text())\n                .then(data => {\n                    chat.innerHTML = data;\n                    // Auto-scroll to the bottom\n                    chat.scrollTop = chat.scrollHeight; \n                });\n        }, 1500);\n    </script>\n</body>\n</html>)rawliteral\");\n}\n\nvoid handleSendChat() {\n  String user = server.arg(\"user\");\n  String msg = server.arg(\"msg\");\n  String c = server.arg(\"color\");\n\n  String newEntry = \"<p style='color: \" + c + \"; margin: 2px 0;'><b>[\" + user + \"]</b> \" + msg + \"</p>\";\n  History += newEntry;\n}\n\nvoid handleGetChat() {\n  server.send(200, \"text/plain\", History);\n}\n\nvoid handleColor() {\n  String hexs = server.arg(\"hex\");\n  if (hexs.startsWith(\"#\")) {\n    hexs.remove(0,1);\n  }\n  long hex = strtol(hexs.c_str(), NULL, 16);\n  byte r = (hex >> 16) & 0xFF;\n  byte g = (hex >> 8) & 0xFF;\n  byte b = hex & 0xFF;\n  setColor(r,g,b);\n  server.sendHeader(\"Location\",\"/\");\n  server.send(303);\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  WiFi.begin(ssid, password);\n  Serial.print(\"connecting to wifi\");\n\n  while (WiFi.status() != WL_CONNECTED) {\n    delay(500);\n    Serial.print(\".\");\n  }\n  Serial.println(\"\\n Connected!, IP address: \");\n  Serial.println(WiFi.localIP());\n  ledcSetup(0, 5000, 8);\n  ledcAttachPin(RED_PIN, 0);\n  ledcSetup(1, 5000, 8);\n  ledcAttachPin(GREEN_PIN, 1);\n  ledcSetup(2, 5000, 8);\n  ledcAttachPin(BLUE_PIN, 2);\n\n  server.on(\"/\", handleRoot);\n  server.on(\"/color\", handleColor);\n  server.on(\"/sendChat\", handleSendChat);\n  server.on(\"/getChat\", handleGetChat);\n  server.begin();\n  Serial.println(\"\\n Web Server Sarted! \");\n}\n\nvoid loop() {\n  server.handleClient();\n}\n\n\n\n\n\n\n"
+      }
+    ]
+  },
+  "components": [],
+  "wires": [],
+  "activeBoardId": "esp32",
+  "ignoreStock": false
+}
