@@ -13,6 +13,7 @@
 
 a verry simple chatroom
 
+with a die roller for a d20, d12, d10, d8, d6, and d4
 
 ## How It Works
 
