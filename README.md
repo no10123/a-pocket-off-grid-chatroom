@@ -5,7 +5,7 @@
 ![a pocket off grid, chatroom.](screenshot.webp)
 
 
-> Built in [Breadboard](https://breadboard.hackclub.com), a Hack Club program. This project took ~6 hours of work.
+> Built in [Breadboard](https://breadboard.hackclub.com), a Hack Club program. This project took ~6.1 hours of work.
 
 
 
@@ -21,7 +21,7 @@ The circuit is captured in `breadboard-project.json`, and the firmware that runs
 
 ## How To Use It
 
-click run then wait for the led to turn off, then click a button to roll a die,  the result will show up on the screen, and the led will turn green normally, but yellow if you get a crit (the max roll for that die), only press a button while led is off.
+click run then wait for the led to turn off, then click a button to roll a die,  the result will show up on the screen, and the led will turn green normally, but yellow if you get a crit (the max roll for that die), only press a button while led is off. It also has a chatroom, but you can't assess the chatroom in the online ide.
 
 
 ## Demo
@@ -40,6 +40,12 @@ The editor snapshot is in `breadboard-project.json`.
 | Part | Quantity |
 | --- | --- |
 | esp32 | 1 |
+| push button | 6 |
+| 1k ohm resistor | 3 |
+| rgb led | 1 |
+| SSD1306 OLED (I2C) | 1 |
+| wires (a lot) | 1 |
+| breadboard | 1 |
 
 
 ## Firmware
@@ -56,7 +62,7 @@ Build journal entries are kept in [`journals.md`](journals.md).
 
 
 
-*Made in [Breadboard](https://breadboard.hackclub.com) — 6h of work*
+*Made in [Breadboard](https://breadboard.hackclub.com) — 6.1h of work*
 
 
 
