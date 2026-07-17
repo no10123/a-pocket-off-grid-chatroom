@@ -202,7 +202,7 @@ void loop() {
   }
 }
 
-
+//5 bread an hour is 60 / 5 which is 12 so 1 bread each 12 min.
 
 
 
